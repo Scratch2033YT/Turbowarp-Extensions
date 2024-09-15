@@ -1,0 +1,97 @@
+const AI = {
+    // This function initializes the extension
+    getInfo() {
+        return {
+            id: 'AI_extension',
+            name: 'AI chatgpt',
+            blocks: [
+                {
+                    opcode: 'generateUUIDWithMessage',
+                    blockType: Scratch.BlockType.REPORTER,
+                    text: 'Generate UUID with message [MESSAGE]',
+                    arguments: {
+                        MESSAGE: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'Chathere'
+                        }
+                    }
+                }
+            ]
+        };
+    },
+
+    // This function is called when the block is used
+    generateUUIDWithMessage({ MESSAGE }) {
+        const uuid = this.generateCustomUUID();
+        const data = {
+            "action": "next",
+            "messages": [
+                {
+                    "id": uuid,
+                    "author": {
+                        "role": "user"
+                    },
+                    "content": {
+                        "content_type": "text",
+                        "parts": [
+                            MESSAGE
+                        ]
+                    },
+                    "metadata": {
+                        "serialization_metadata": {
+                            "custom_symbol_offsets": []
+                        }
+                    },
+                    "create_time": Date.now() / 1000 // Current time in seconds
+                }
+            ],
+            "conversation_id": "66e6498f-c994-800c-a3ee-98c33258fca3",
+            "parent_message_id": "7fbca231-8c07-4de0-884e-544e15489b1a",
+            "model": "auto",
+            "timezone_offset_min": -420,
+            "suggestions": [],
+            "history_and_training_disabled": false,
+            "conversation_mode": {
+                "kind": "primary_assistant"
+            },
+            "force_paragen": false,
+            "force_paragen_model_slug": "",
+            "force_nulligen": false,
+            "force_rate_limit": false,
+            "reset_rate_limits": false,
+            "websocket_request_id": "6ed32620-50f3-4339-a46f-0c34f4222003",
+            "system_hints": [],
+            "force_use_sse": true,
+            "conversation_origin": null,
+            "client_contextual_info": {
+                "is_dark_mode": false,
+                "time_since_loaded": 59,
+                "page_height": 520,
+                "page_width": 647,
+                "pixel_ratio": 1.2,
+                "screen_height": 640,
+                "screen_width": 1139
+            }
+        };
+
+        // Return the UUID and data object
+        return JSON.stringify({ uuid, data });
+    },
+
+    // Function to generate a custom UUID
+    generateCustomUUID() {
+        const prefix = 'aaa';
+        const randomHex = (length) => {
+            return [...Array(length)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+        };
+        const part1 = randomHex(4);
+        const part2 = randomHex(4);
+        const part3 = randomHex(4);
+        const part4 = randomHex(4);
+        const part5 = randomHex(12);
+        return `${prefix}-${part1}-${part2}-${part3}-${part4}-${part5}`;
+    }
+};
+
+// Register the extension
+Scratch.extensions.register(AI);
